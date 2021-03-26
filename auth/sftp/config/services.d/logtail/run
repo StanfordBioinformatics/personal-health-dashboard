@@ -1,0 +1,9 @@
+#!/usr/bin/with-contenv bash
+
+# let's create these files for now
+touch /logs/sftpgo.log
+touch /logs/sftpgo_external_auth.log
+
+# redirect the logs from sftpgo to the stdout of the container
+exec tail -f /logs/sftpgo_external_auth.log > /proc/1/fd/1 &
+exec tail -f /logs/sftpgo.log > /proc/1/fd/1

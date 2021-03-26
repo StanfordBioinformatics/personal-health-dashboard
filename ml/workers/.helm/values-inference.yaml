@@ -1,0 +1,27 @@
+nameOverride: preprocessing
+
+image:
+  repository: gcr.io/phd-project/inference
+  tag: latest
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 1
+    memory: 4Gi
+  # limits:
+  #   cpu: 1
+  #   memory: 4Gi
+
+nodeSelector:
+  workload: trainference
+
+service:
+  enabled: false
+
+env:
+  - name: PYTHONUNBUFFERED
+    value: "1"
+
+argo:
+  enabled: true

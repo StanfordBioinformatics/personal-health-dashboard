@@ -1,0 +1,25 @@
+nameOverride: trainference
+
+image:
+  repository: gcr.io/phd-project/trainference
+  tag: latest
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 4
+    memory: 48Gi
+
+nodeSelector:
+  workload: trainference
+
+service:
+  enabled: false
+
+env:
+  - name: PYTHONUNBUFFERED
+    value: "1"
+
+argo:
+  enabled: true
+  backoffLimit: 10

@@ -1,0 +1,32 @@
+{{- if not .Values.argo.enabled }}
+{{- if .Values.hpa.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "workers.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "workers.labels" . | nindent 4 }}
+spec:
+  maxReplicas: {{ .Values.hpa.max }}
+  minReplicas: {{ .Values.hpa.min }}
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ template "workers.fullname" . }}
+  metrics:
+  {{- if .Values.hpa.metrics }}
+    {{- toYaml .Values.hpa.metrics | nindent 4 }}
+  {{- end }}
+  {{- if .Values.hpa.targetAverageUtilization }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.hpa.targetAverageUtilization }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.hpa.targetAverageUtilization }}
+  {{- end }}
+{{- end }}
+{{- end }}

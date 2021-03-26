@@ -1,0 +1,27 @@
+defaultRules:
+  rules:
+    etcd: false
+
+prometheus:
+  service:
+    type: NodePort
+  prometheusSpec:
+    serviceMonitorNamespaceSelector:
+      any: true
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 60Gi
+grafana:
+  enabled: false
+
+alertmanager:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
+kubeProxy:
+  enabled: false

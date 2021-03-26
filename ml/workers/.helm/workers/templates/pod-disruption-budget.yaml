@@ -1,0 +1,16 @@
+{{- if not .Values.argo.enabled }}
+{{ if gt .Values.hpa.min 1.0 }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "workers.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "workers.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "workers.selectorLabels" . | nindent 6 }}
+  minAvailable: {{ sub .Values.hpa.min 1 }}
+{{- end }}
+{{- end }}

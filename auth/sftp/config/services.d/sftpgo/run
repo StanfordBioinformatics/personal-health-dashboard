@@ -1,0 +1,13 @@
+#!/usr/bin/with-contenv bash
+
+if [ ! -z $GCS_PAYLOAD_CREDS_FILE ]; then
+    echo "found payload json file: $GCS_PAYLOAD_CREDS_FILE; populating base64 env"
+    export GCS_PAYLOAD_CREDS_B64=$(cat $GCS_PAYLOAD_CREDS_FILE | base64)
+fi
+
+if [ ! -z $GCS_KEYS_CREDS_FILE ]; then
+    echo "found keys json file: $GCS_KEYS_CREDS_FILE; populating json env"
+    export GCS_KEYS_CREDS_JSON=$(cat $GCS_KEYS_CREDS_FILE)
+fi
+
+exec /config/sftpgo/sftpgo serve

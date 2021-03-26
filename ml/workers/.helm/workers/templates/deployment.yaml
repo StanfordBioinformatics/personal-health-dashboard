@@ -1,0 +1,88 @@
+{{- if not .Values.argo.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "workers.fullname" . }}
+  labels:
+    {{- include "workers.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "workers.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "workers.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "workers.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          {{- if .Values.projectID }}
+            - name: GOOGLE_CLOUD_PROJECT
+              value: {{ .Values.projectID }}
+          {{- end }}
+          {{- if .Values.baseEnv }}
+            {{- toYaml .Values.baseEnv | nindent 12 }}
+          {{- end }}
+          {{- if .Values.env }}
+            {{- toYaml .Values.env | nindent 12 }}
+          {{- end }}
+          {{- if .Values.envFrom }}
+          envFrom:
+            {{- toYaml .Values.envFrom | nindent 12 }}
+          {{- end }}
+        {{- if .Values.port.enabled -}}
+          ports:
+            - name: http
+              containerPort: {{ .Values.port.number }}
+              protocol: TCP
+        {{- end }}
+        {{- if .Values.health.enabled -}}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+        {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          {{ if and .Values.secret .Values.secret.enabled }}
+            - name: {{ .Chart.Name }}-credentials
+              mountPath: {{ .Values.secret.directory }}/{{ .Values.secret.filename }}
+              subPath: {{ .Values.secret.filename }}
+              readOnly: true
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      volumes:
+      {{ if and .Values.secret .Values.secret.enabled }}
+        - name: {{ .Chart.Name }}-credentials
+          secret:
+            secretName: {{ .Values.secret.name }}
+      {{- end }}
+{{- end }}

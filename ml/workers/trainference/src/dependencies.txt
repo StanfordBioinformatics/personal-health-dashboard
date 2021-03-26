@@ -1,0 +1,6 @@
+google-cloud-storage==1.32.0
+
+# These are for rhrad_online.py
+seaborn
+statsmodels
+sklearn

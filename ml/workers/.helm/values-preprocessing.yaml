@@ -1,0 +1,28 @@
+nameOverride: preprocessing
+
+image:
+  repository: gcr.io/phd-project/preprocessing
+  tag: latest
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 700m
+    memory: 2Gi
+  # limits:
+  #   cpu: 1
+  #   memory: 4Gi
+
+nodeSelector:
+  workload: preprocessing
+
+service:
+  enabled: false
+
+env:
+  - name: PYTHONUNBUFFERED
+    value: "1"
+
+argo:
+  enabled: true
+  backoffLimit: 10

@@ -1,0 +1,28 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "workers.fullname" . }}-cleanup
+  labels:
+    {{- include "workers.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.cleanup.schedule | quote }}
+  successfulJobsHistoryLimit: {{ default 10 .Values.cleanup.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ default 10 .Values.cleanup.failedJobsHistoryLimit }}
+  concurrencyPolicy: {{ default "Forbid" .Values.cleanup.concurrencyPolicy }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "workers.selectorLabels" . | nindent 12 }}
+        spec:
+          serviceAccountName: {{ .Values.argo.serviceAccount }}
+          containers:
+          - name: {{ .Chart.Name }}
+            image: bitnami/kubectl:latest
+            command: ["sh", "-c", "kubectl delete jobs -l app.kubernetes.io/name={{ include "workers.name" . }} --field-selector status.successful=1"]
+            resources:
+              limits:
+                cpu: 100m
+                memory: 128Mi
+          restartPolicy: {{ default "Never" .Values.cleanup.restartPolicy }}

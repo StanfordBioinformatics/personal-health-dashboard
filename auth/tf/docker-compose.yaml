@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  tf:
+    network_mode: host
+    image: hashicorp/terraform:0.12.29
+    environment:
+      TF_IN_AUTOMATION: ${TF_IN_AUTOMATION}
+      TF_VAR_google_creds_path: "/root/.config/gcloud/application_default_credentials.json"
+    volumes:
+      - ~/.config/gcloud/application_default_credentials.json:/root/.config/gcloud/application_default_credentials.json
+      - .:/workspace
+      - /root/.kube
+    logging:
+      driver: "json-file"
+    working_dir: /workspace
+    entrypoint: "/bin/sh -c"
+    command: "make plan"

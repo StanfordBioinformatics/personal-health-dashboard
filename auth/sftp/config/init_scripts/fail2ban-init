@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+
+touch $CONSOLIDATED_FAILED_AUTH_LOGFILE
+fail2ban-client start
+echo 'fail2ban started'

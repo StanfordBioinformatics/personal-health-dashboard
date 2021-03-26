@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-auth-poc-metrics
+  namespace: default
+  labels:
+    app: k8s-auth-poc
+spec:
+  ports:
+    - name: metrics
+      port: 8080
+      protocol: TCP
+  selector:
+    app: k8s-auth-poc
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  namespace: default
+  name: k8s-auth-poc
+spec:
+  selector:
+    matchLabels:
+      app: k8s-auth-poc
+  namespaceSelector:
+    matchNames:
+      - "default"
+  endpoints:
+    - port: metrics
+      path: "/metrics"

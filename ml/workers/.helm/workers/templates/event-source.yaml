@@ -1,0 +1,32 @@
+{{- if .Values.argo.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: {{ include "workers.fullname" . }}
+  namespace: argo-events
+  labels:
+    {{- include "workers.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.argo.serviceAccount }}
+  template:
+    serviceAccountName: {{ .Values.argo.serviceAccount }}
+  {{- end }}
+  pubSub:
+    {{ include "workers.fullname" . }}:
+      # jsonBody specifies that all event body payload coming from this
+      # source will be JSON
+      jsonBody: true
+      # id of your project
+      projectID: {{ .Values.projectID }}
+      # (optional) id of project for topic, same as projectID by default
+      # topicProjectID: "project-id"
+      # topic name
+      topic: {{ include "workers.fullname" . }}
+      # subscription ID
+      subscriptionID: {{ include "workers.fullname" . }}
+      # (optional) Refers to a k8s scret which contains the credential JSON to access pubsub.
+      # If it is missing, it implicts to use Workload Identity.
+      credentialSecret:
+        name: argo-secrets
+        key: key.json
+{{- end }}

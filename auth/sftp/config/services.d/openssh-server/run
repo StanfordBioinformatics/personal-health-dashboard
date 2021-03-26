@@ -1,0 +1,3 @@
+#!/usr/bin/with-contenv bash
+
+exec /usr/sbin/sshd -D -e -p 2222 -E /config/logs/openssh/openssh.log

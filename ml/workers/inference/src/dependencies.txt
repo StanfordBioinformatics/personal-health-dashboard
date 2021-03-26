@@ -1,0 +1,4 @@
+sklearn==0.0
+mlflow==1.11.0
+google-cloud-bigquery==2.2.0
+google-cloud-storage==1.32.0

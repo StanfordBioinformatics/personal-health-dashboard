@@ -1,6 +1,18 @@
-# Analysis Examples
+# personal-health-dashboard
 
-We provide two examples for analysing wearables data as shown in the PHD paper. The `LogisticRegressionExample.ipynb` provides the preprocessing and analysis code for training and evaluating a regularized logistic regression model on deidentified wearables data. The `UMAPExample.ipynb` provised the preprocessing and analysis code to run an exploratory analysis of the users' wearables featurespace.
+This repository contains all Personal Health Dashboard (PHD) modules.
 
-In order to run both code examples, first download the wearables data from the [cloud bucket](https://www.google.com). Make sure to edit the `PATH` variable in both notebooks to point to the data directory.
+## [auth](auth/)
+This module includes all code for the front-end authentication and SFTP of the PHD system.
 
+Visit [auth README](auth/README.md) for additional details.
+
+## [decrypt](decrypt/)
+This module includes all code for the decryption components of the PHD system.
+
+Visit [decrypt README](decrypt/README.md) for additional details.
+
+## [ml](ml/)
+This module includes all code for the ML components of the PHD system.
+
+Visit [ml README](ml/README.md) for additional details.

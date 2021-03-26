@@ -1,0 +1,96 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: {{ include "workers.fullname" . }}
+  namespace: argo-events
+  labels:
+    {{- include "workers.labels" . | nindent 4 }}
+spec:
+  template:
+  {{- if .Values.argo.serviceAccount }}
+    serviceAccountName: {{ .Values.argo.serviceAccount }}
+  {{- end }}
+  dependencies:
+    - name: {{ include "workers.fullname" . }}
+      eventSourceName: {{ include "workers.fullname" . }}
+      eventName: {{ include "workers.fullname" . }}
+  triggers:
+    - template:
+        name: {{ include "workers.fullname" . }}
+        k8s:
+          group: "batch"
+          version: v1
+          resource: jobs
+          operation: create
+          source:
+            resource:
+              apiVersion: batch/v1
+              kind: Job
+              metadata:
+                generateName: {{ include "workers.fullname" . }}-
+                namespace: {{ .Release.Namespace }}
+                labels:
+                  {{- include "workers.labels" . | nindent 18 }}
+              spec:
+                ttlSecondsAfterFinished: {{ .Values.argo.ttlSecondsAfterFinished }}
+                template:
+                  spec:
+                    restartPolicy: OnFailure
+                  {{- if .Values.argo.serviceAccount }}
+                    serviceAccountName: {{ .Values.argo.serviceAccount }}
+                  {{- end }}
+                    containers:
+                      - name: {{ include "workers.fullname" . }}
+                        env:
+                          - name: MESSAGE_BODY
+                            value: {{`"{{ inputs.parameters.message }}"`}}
+                        {{- if .Values.projectID }}
+                          - name: GOOGLE_CLOUD_PROJECT
+                            value: {{ .Values.projectID }}
+                        {{- end }}
+                        {{- if .Values.baseEnv }}
+                          {{- toYaml .Values.baseEnv | nindent 26 }}
+                        {{- end }}
+                        {{- if .Values.env }}
+                          {{- toYaml .Values.env | nindent 26 }}
+                        {{- end }}
+                        args:
+                          - --message=$(MESSAGE_BODY)
+                        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+                        imagePullPolicy: {{ .Values.image.pullPolicy }}
+                        resources:
+                          {{- toYaml .Values.resources | nindent 26 }}
+                        volumeMounts:
+                        {{ if and .Values.secret .Values.secret.enabled }}
+                          - name: {{ .Chart.Name }}-credentials
+                            mountPath: {{ .Values.secret.directory }}/{{ .Values.secret.filename }}
+                            subPath: {{ .Values.secret.filename }}
+                            readOnly: true
+                        {{- end }}
+                    {{- with .Values.nodeSelector }}
+                    nodeSelector:
+                      {{- toYaml . | nindent 22 }}
+                    {{- end }}
+                  {{- with .Values.affinity }}
+                    affinity:
+                      {{- toYaml . | nindent 22 }}
+                  {{- end }}
+                  {{- with .Values.tolerations }}
+                    tolerations:
+                      {{- toYaml . | nindent 22 }}
+                  {{- end }}
+                    volumes:
+                    {{ if and .Values.secret .Values.secret.enabled }}
+                      - name: {{ .Chart.Name }}-credentials
+                        secret:
+                          secretName: {{ .Values.secret.name }}
+                          items:
+                          - key: {{ .Values.secret.key }}
+                            path: {{ .Values.secret.filename }}
+                    {{- end }}
+                backoffLimit: {{ .Values.argo.backoffLimit }}
+          parameters:
+            - src:
+                dependencyName: {{ include "workers.fullname" . }}
+                dataKey: "body"
+              dest: spec.template.spec.containers.0.env.0.value

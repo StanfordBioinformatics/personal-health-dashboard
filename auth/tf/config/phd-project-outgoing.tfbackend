@@ -1,0 +1,3 @@
+bucket = "phd-tf-state"
+
+prefix = "phd-prjoject/terraform/state.tfstate"

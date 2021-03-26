@@ -1,0 +1,72 @@
+{
+  "sftpd": {
+    "bind_port": 22,
+    "bind_address": "0.0.0.0",
+    "idle_timeout": 2,
+    "max_auth_tries": 3,
+    "umask": "0022",
+    "banner": "",
+    "upload_mode": 2,
+    "actions": {
+      "execute_on": [],
+      "command": "",
+      "http_notification_url": ""
+    },
+    "keys": [{
+      "private_key": "/secrets/ssh_host_id_rsa"
+    }, {
+      "private_key": "/secrets/ssh_host_id_ecdsa"
+    }, {
+      "private_key": "/secrets/ssh_host_id_ed25519"
+    }],
+    "enable_scp": false,
+    "kex_algorithms": [],
+    "ciphers": [],
+    "macs": [],
+    "login_banner_file": "",
+    "setstat_mode": 0,
+    "enabled_ssh_commands": [
+      "md5sum",
+      "sha1sum",
+      "cd",
+      "pwd"
+    ],
+    "keyboard_interactive_auth_program": "",
+    "proxy_protocol": 1,
+    "proxy_allowed": []
+  },
+  "data_provider": {
+    "driver": "memory",
+    "name": "",
+    "host": "",
+    "port": 0,
+    "username": "",
+    "password": "",
+    "sslmode": 0,
+    "connection_string": "",
+    "users_table": "users",
+    "manage_users": 1,
+    "track_quota": 2,
+    "pool_size": 0,
+    "users_base_dir": "",
+    "actions": {
+      "execute_on": [],
+      "command": "",
+      "http_notification_url": ""
+    },
+    "external_auth_program": "/config/sftpgo/sftp_external_auth",
+    "external_auth_scope": 2,
+    "credentials_path": "/credentials",
+    "pre_login_program": ""
+  },
+  "httpd": {
+    "bind_port": 0,
+    "bind_address": "127.0.0.1",
+    "templates_path": "templates",
+    "static_files_path": "static",
+    "backups_path": "backups",
+    "auth_user_file": "",
+    "certificate_file": "",
+    "certificate_key_file": ""
+  }
+}

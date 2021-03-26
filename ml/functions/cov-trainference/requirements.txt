@@ -1,0 +1,13 @@
+# Function dependencies, for example:
+# package>=version
+pyarrow>=0.4
+requests>=2.19.1
+google-cloud-storage==1.22.0
+google-cloud-error-reporting==0.34.0
+google-cloud-pubsub==2.1.0
+google-cloud-bigquery
+numpy
+pandas
+crypto
+pycrypto
+datetime
