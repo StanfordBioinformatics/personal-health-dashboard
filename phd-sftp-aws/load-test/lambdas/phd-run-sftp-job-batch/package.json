@@ -1,0 +1,11 @@
+{
+  "name": "run-load-test-job",
+  "version": "1.0.0",
+  "description": "Lambda that kicks off batch nof sftp jobs",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "uuid": "^3.2.1"
+  }
+}
