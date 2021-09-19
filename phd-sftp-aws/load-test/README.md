@@ -4,7 +4,7 @@ We wanted to measure the scalability aspect of AWS Transfer service to see what 
 traffic can be supported by each server and when to put more servers into the pool.
 
 
-## [Methodology]
+# [Methodology]
 We used two lambdas together with an S3 bucket and Dynamodb to run the test.
 
 phd-run-sftp-job - Implements a logic that would allow X number of concurrent connections 
@@ -18,7 +18,7 @@ once it has spun of Y number of lambdas and each are ready with their test data 
 
 We preferred lambda to the test because that gives us completeled isolate run time env which is close relica of  real life traffic.
 
-## [load-test results](load-test/results/sftp-load-test-results.png)
+## [load-test results](results/sftp-load-test-results.png)
 
 
 

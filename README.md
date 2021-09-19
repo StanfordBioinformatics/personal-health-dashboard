@@ -19,4 +19,4 @@ Visit [ml README](ml/README.md) for additional details.
 
 ## [phd-sftp-aws](phd-sftp-aws/)
 This module includes all codes and documentation for SFTP implementation on AWS
-Visit [phd-sftp-aws README](phd-sftp-awsl/README.md) for additional details.
+Visit [phd-sftp-aws README](phd-sftp-aws/README.md) for additional details.
