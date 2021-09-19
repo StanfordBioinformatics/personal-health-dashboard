@@ -1,0 +1,12 @@
+cd /tmp
+pip3 install -U PyCryptodome
+yum update -y 
+cd /usr/local/bin
+mkdir src
+cd src
+mkdir authentication
+instance=`ec2-metadata -i`
+instanceId=`echo $instance | cut -d' ' -f2`
+export INSTANCE_ID=$instanceId
+
+
