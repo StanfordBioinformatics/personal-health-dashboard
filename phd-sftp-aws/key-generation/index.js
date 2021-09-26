@@ -37,7 +37,7 @@ ${keyGeneratePy}\nEOF\n
 cat > rsa.py<<'EOF'
 ${rsaPy}\nEOF\n
 chmod +x key_management.sh
-sudo sh -c "/usr/local/bin/src/key_management.sh ${event.numberOfKeys} ${event.studyID} /usr/local/bin/src/ ${process.env.DEDUP_TBL} ${process.env.NOTIF_BUCKET} ${process.env.MAPPING_BUCKET} ${process.env.PRIVATE_KEY_BUCKET} ${process.env.AUTH_HAWK_BUCKET} ${process.env.AUTH_BUCKET}"
+sudo sh -c "/usr/local/bin/src/key_management.sh ${event.numberOfKeys} ${event.studyID} /usr/local/bin/src/ ${process.env.DEDUP_TBL} ${process.env.NOTIF_BUCKET} ${process.env.MAPPING_BUCKET} ${process.env.PRIVATE_KEY_BUCKET} ${process.env.AUTH_HAWK_BUCKET} ${process.env.AUTH_BUCKET} ${process.env.CUSTOMER_KEY_BUCKET} ${process.env.USER_KEY_MAP_TBL}"
                 `            
             //script = script + '\nEOF';
             script = script + `
