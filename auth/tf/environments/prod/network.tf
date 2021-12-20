@@ -54,7 +54,7 @@ resource "google_compute_backend_service" "glb" {
   }
 
   log_config {
-    enable = false
+    enable = true
   }
 
   lifecycle {

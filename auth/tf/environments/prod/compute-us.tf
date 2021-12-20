@@ -1,12 +1,9 @@
-// Deploys multi-region GKE cluster for PHD
-
-// East cluster
 module "east_cluster" {
-  source = "./cluster"
+  source = "../../modules/cluster"
 
   cluster_project = var.cluster_project
   prefix          = var.prefix
-  region          = var.east_region
+  region          = "us-east1"
 
   network   = google_compute_network.network.self_link
   port_name = local.portName
@@ -16,7 +13,7 @@ module "east_cluster" {
 }
 
 module "east_workloads" {
-  source                 = "./workloads"
+  source                 = "../../modules/workloads"
   host                   = module.east_cluster.host
   client_certificate     = module.east_cluster.client_certificate
   client_key             = module.east_cluster.client_key
@@ -24,7 +21,7 @@ module "east_workloads" {
   nodes_ready            = module.east_cluster.nodes_ready
   port_name              = local.portName
   port_num               = local.port
-  region                 = var.east_region
+  region                 = "us-east1"
   cluster_name           = module.east_cluster.name
   cluster_project        = var.cluster_project
   sftp_permissions       = var.sftp_permissions
@@ -33,14 +30,12 @@ module "east_workloads" {
   zones                  = module.east_cluster.zones
 }
 
-// West cluster
-
 module "west_cluster" {
-  source = "./cluster"
+  source = "../../modules/cluster"
 
   cluster_project = var.cluster_project
   prefix          = var.prefix
-  region          = var.west_region
+  region          = "us-west1"
 
   network       = google_compute_network.network.self_link
   subnet_prefix = "1"
@@ -51,7 +46,7 @@ module "west_cluster" {
 }
 
 module "west_workloads" {
-  source                 = "./workloads"
+  source                 = "../../modules/workloads"
   host                   = module.west_cluster.host
   client_certificate     = module.west_cluster.client_certificate
   client_key             = module.west_cluster.client_key
@@ -59,7 +54,7 @@ module "west_workloads" {
   nodes_ready            = module.west_cluster.nodes_ready
   port_name              = local.portName
   port_num               = local.port
-  region                 = var.west_region
+  region                 = "us-west1"
   cluster_name           = module.west_cluster.name
   cluster_project        = var.cluster_project
   sftp_permissions       = var.sftp_permissions

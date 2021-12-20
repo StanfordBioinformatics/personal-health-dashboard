@@ -8,7 +8,7 @@ locals {
   clusterName = "${var.prefix}-${var.region}"
   zones       = slice(data.google_compute_zones.available.names, 0, min(var.num_zones, length(data.google_compute_zones.available.names)))
 
-  defaultVersion = "1.16.13-gke.1"
+  defaultVersion = "1.21.6-gke.1500"
   oauth_scopes = [
     "https://www.googleapis.com/auth/devstorage.read_only",
     "https://www.googleapis.com/auth/logging.write",
@@ -32,6 +32,8 @@ resource "google_container_cluster" "phd_cluster" {
   subnetwork = google_compute_subnetwork.subnet.self_link
 
   min_master_version = local.defaultVersion
+
+  enable_shielded_nodes = true
 
   lifecycle {
     ignore_changes = [node_pool]
@@ -112,5 +114,3 @@ resource "google_container_node_pool" "primary" {
     ]
   }
 }
-
-

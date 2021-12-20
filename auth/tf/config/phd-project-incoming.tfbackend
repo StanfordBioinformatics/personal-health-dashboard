@@ -1,3 +1,0 @@
-bucket = "phd-tf-state"
-
-prefix = "phd-project/terraform/state.tfstate"

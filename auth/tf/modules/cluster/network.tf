@@ -32,7 +32,6 @@ resource "google_compute_instance_group_named_port" "phd_port" {
   name = var.port_name
 }
 
-
 // Create a cloud router for use by the Cloud NAT
 resource "google_compute_router" "router" {
   name    = "${var.prefix}-${var.region}-cloud-router"

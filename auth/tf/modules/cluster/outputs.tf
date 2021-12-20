@@ -11,7 +11,7 @@ output "node_version" {
 }
 
 output "nodes_ready" {
-  value = "${google_container_node_pool.primary.name == "" ? "" : ""}"
+  value = google_container_node_pool.primary.name == "" ? false : true
 }
 
 output "host" {

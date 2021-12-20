@@ -9,11 +9,10 @@
 ## How To Run
 
 ### Environment
-The following environment variables need to be set:
-1. `GOOGLE_APPLICATION_CREDENTIALS`
-  -  Provide authentication credentials to your application code by setting this environment variable.
-2. `CLUSTER_PROJECT`
-  - This is the name of the target GCP Project. For phd-project Project, this should be: "phd-prj-phd-project".
+Make a copy of `.env.example` as `.env` and set the required environment variables.
+
+### GCS Backend
+Update terraform `backend` values in [`provider.tf`](.environments/prod/provider.tf)
 
 ### Make Commands
 Run the command `make` to list all commands (as shown below):
@@ -27,24 +26,14 @@ up              Create and run the executable plan in a Docker container (requir
 ```
 
 ### Run Make Commands
-How to init and run a plan for phd-project
+How to init and run a plan
 ```bash
-CLUSTER_PROJECT=phd-project make init plan
+make init plan
 ```
 
-How to init and run a plan for phd-project
+How to run and apply changes
 ```bash
-CLUSTER_PROJECT=phd-prj-phd-project make init plan
-```
-
-How to run and apply changes for phd-project
-```bash
-CLUSTER_PROJECT=phd-project make up
-```
-
-How to run and apply changes for phd-project
-```bash
-CLUSTER_PROJECT=phd-prj-phd-project make up
+make up
 ```
 
 ### Clean up all docker instances

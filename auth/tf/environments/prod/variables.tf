@@ -17,18 +17,6 @@ variable "prefix" {
   default     = "phd"
 }
 
-variable "east_region" {
-  description = "Region containing East coast cluster"
-  type        = string
-  default     = "us-east1"
-}
-
-variable "west_region" {
-  description = "Region containing West coast cluster"
-  type        = string
-  default     = "us-west1"
-}
-
 variable "num_zones" {
   description = "Number of zones to deploy per region"
   type        = number

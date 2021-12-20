@@ -3,10 +3,16 @@ version: "3.7"
 services:
   tf:
     network_mode: host
-    image: hashicorp/terraform:0.12.29
+    image: hashicorp/terraform:0.12.31
     environment:
       TF_IN_AUTOMATION: ${TF_IN_AUTOMATION}
       TF_VAR_google_creds_path: "/root/.config/gcloud/application_default_credentials.json"
+      TF_VAR_glb_address:
+      TF_VAR_gcs_keys_bucket:
+      TF_VAR_cluster_project:
+      TF_VAR_sftp_permissions:
+      TF_STATE_BUCKET:
+      TF_STATE_PREFIX:
     volumes:
       - ~/.config/gcloud/application_default_credentials.json:/root/.config/gcloud/application_default_credentials.json
       - .:/workspace

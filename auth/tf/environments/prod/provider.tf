@@ -1,12 +1,12 @@
 provider "google" {
-  version = "= 3.42"
+  version = "= 3.76"
 
   credentials = file(var.google_creds_path)
   project     = var.cluster_project
 }
 
 provider "google-beta" {
-  version = "= 3.42"
+  version = "= 3.76"
 
   credentials = file(var.google_creds_path)
   project     = var.cluster_project
@@ -14,6 +14,7 @@ provider "google-beta" {
 
 terraform {
   backend "gcs" {
-    bucket = "phd-project-tf-state"
+    bucket = "<TODO>"
+    prefix = "<TODO>"
   }
 }
