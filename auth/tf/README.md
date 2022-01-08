@@ -11,9 +11,6 @@
 ### Environment
 Make a copy of `.env.example` as `.env` and set the required environment variables.
 
-### GCS Backend
-Update terraform `backend` values in [`provider.tf`](.environments/prod/provider.tf)
-
 ### Make Commands
 Run the command `make` to list all commands (as shown below):
 ```

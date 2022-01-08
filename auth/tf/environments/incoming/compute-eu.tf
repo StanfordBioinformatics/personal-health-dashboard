@@ -26,7 +26,7 @@ module "eu_north_workloads" {
   cluster_name           = module.eu_north_cluster.name
   cluster_project        = var.cluster_project
   sftp_permissions       = var.sftp_permissions
-  gcs_keys_bucket        = var.gcs_keys_bucket
+  gcs_keys_bucket        = var.gcs_keys_bucket_eu
   network                = google_compute_network.network.name
   zones                  = module.eu_north_cluster.zones
 }

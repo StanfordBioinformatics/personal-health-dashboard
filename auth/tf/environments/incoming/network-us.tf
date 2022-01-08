@@ -8,25 +8,19 @@ locals {
     module.west_cluster.instance_groups,
   )
 
-  elb_ranges = [
-    "130.211.0.0/22",
-    "35.191.0.0/16",
-  ]
+  us_name = "phd-us"
 }
 
-
-resource "google_compute_network" "network" {
-  name                    = "${var.prefix}-net"
-  project                 = var.cluster_project
-  auto_create_subnetworks = false
+resource "google_compute_global_address" "ip_address" {
+  name        = "${local.us_name}-ip-prod"
+  description = "IP address for global load balancer for production access of MyPhD"
 }
-
 
 resource "google_compute_global_forwarding_rule" "glb" {
-  name = "phd-us"
+  name = local.us_name
 
   ip_protocol           = "TCP"
-  ip_address            = var.glb_address
+  ip_address            = google_compute_global_address.ip_address.address
   load_balancing_scheme = "EXTERNAL"
   port_range            = join("-", [local.externalPort, local.externalPort])
 
@@ -34,13 +28,13 @@ resource "google_compute_global_forwarding_rule" "glb" {
 }
 
 resource "google_compute_target_tcp_proxy" "glb" {
-  name            = "phd-us-global-proxy"
+  name            = "${local.us_name}-global-proxy"
   backend_service = google_compute_backend_service.glb.self_link
   proxy_header    = "PROXY_V1"
 }
 
 resource "google_compute_backend_service" "glb" {
-  name          = "phd-us"
+  name          = local.us_name
   description   = "Directs traffic to all regions running the PHD service"
   health_checks = [google_compute_health_check.glb.self_link]
   port_name     = local.portName
@@ -79,7 +73,7 @@ resource "google_compute_health_check" "glb" {
 resource "google_compute_firewall" "allow-to-phd" {
   name          = "allow-to-phd"
   network       = google_compute_network.network.self_link
-  source_ranges = local.elb_ranges
+  source_ranges = var.firewall_source_ranges
 
   target_tags = ["phd-app"]
 

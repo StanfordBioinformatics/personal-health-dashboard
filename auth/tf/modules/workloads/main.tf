@@ -6,8 +6,6 @@ data "google_container_cluster" "mycluster" {
 }
 
 provider "kubernetes" {
-  version = "2.7.1"
-
   host                   = "https://${var.host}"
   token                  = data.google_client_config.default.access_token
   cluster_ca_certificate = var.cluster_ca_certificate

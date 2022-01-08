@@ -23,11 +23,6 @@ variable "num_zones" {
   default     = 3
 }
 
-variable "glb_address" {
-  description = "IP used to Globally serve PHD traffic"
-  type        = string
-}
-
 variable "preemptible_nodes" {
   description = "A boolean that represents whether or not the underlying node VMs are preemptible"
   default     = true
@@ -35,11 +30,25 @@ variable "preemptible_nodes" {
 
 variable "sftp_permissions" {
   description = "List of permissions for SFTP Auth"
-  default     = ["list"]
+  default     = ["list", "upload"]
   type        = list(string)
 }
 
 variable "gcs_keys_bucket" {
-  description = "GCS Bucket used for Keys"
+  description = "GCS Bucket used for Keys for US"
   type        = string
+}
+
+variable "gcs_keys_bucket_eu" {
+  description = "GCS Bucket used for Keys for EU"
+  type        = string
+}
+
+variable "firewall_source_ranges" {
+  description = "CIDR ranges to allow for the firewall"
+  type        = list(string)
+  default = [
+    "130.211.0.0/22",
+    "35.191.0.0/16",
+  ]
 }
