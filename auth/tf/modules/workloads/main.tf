@@ -6,13 +6,8 @@ data "google_container_cluster" "mycluster" {
 }
 
 provider "kubernetes" {
-  version = "1.13.2"
-
-  load_config_file       = false
-  host                   = "${var.host}${var.nodes_ready}" // used to prevent from starting too early
+  host                   = "https://${var.host}"
   token                  = data.google_client_config.default.access_token
-  client_certificate     = var.client_certificate
-  client_key             = var.client_key
   cluster_ca_certificate = var.cluster_ca_certificate
 }
 
@@ -48,12 +43,15 @@ resource "kubernetes_deployment" "auth" {
       }
 
       spec {
+        automount_service_account_token = false
+        enable_service_links            = false
+
         container {
           name  = local.sink_name
           image = local.sink_image
 
           resources {
-            requests {
+            requests = {
               cpu    = "50m"
               memory = "64Mi"
             }
@@ -107,7 +105,7 @@ resource "kubernetes_deployment" "auth" {
           image = local.image
 
           resources {
-            requests {
+            requests = {
               cpu    = "200m"
               memory = "256Mi"
             }
@@ -225,6 +223,9 @@ resource "kubernetes_deployment" "auth" {
 
           security_context {
             allow_privilege_escalation = false
+            privileged                 = false
+            run_as_user                = "0"
+            run_as_group               = "0"
 
             capabilities {
               add = [
